@@ -1,0 +1,7 @@
+version: "2"
+services:
+  spider:
+    build: .
+    restart: always
+    volumes:
+      - "~/docker_volume/xx/xx.json:/root/output.json"
