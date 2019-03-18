@@ -13,7 +13,7 @@ const iconv    = require('iconv-lite');
 
 //https://github.com/Reactive-Extensions/RxJS
 //https://rxjs.dev/api
-const { from, of } = require('rxjs');
+const { from, of }      = require('rxjs');
 const { map, flatMap }  = require( 'rxjs/operators');
 
 axios.interceptors.request.use(request => {
@@ -70,8 +70,7 @@ from(axios.get(baseURL))
                 const city = {};
                 city.id = cityId;
                 city.name = td.last().children().last().text();
-                city.districts = [];
-                    
+                 
                 cities[i] = city;
             });
 
@@ -125,6 +124,10 @@ from(axios.get(baseURL))
     }, err => {
         console.log(err);
     }, () => {
-        fs.writeFileSync("output.json", JSON.stringify(provinces));        
-        console.log('success');
+        const error = fs.writeFileSync("output.json", JSON.stringify(provinces));        
+        if (error) {
+            console.log(error);    
+        } else {
+            console.log('success');
+        }
     });
