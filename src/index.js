@@ -76,7 +76,7 @@ from(axios.get(baseURL))
 
             const url = response.config.url;
             const provinceId = url.substring(url.lastIndexOf('/'), url.length).substr(1, 2);
-            provinces[provinceIdMap.get(provinceId)].cities = cities;
+            provinces[provinceIdMap.get(provinceId)].children = cities;
             return cities;
         }),
         flatMap(cities => of(...cities)),
@@ -113,7 +113,7 @@ from(axios.get(baseURL))
             const provinceId = cityId.substr(0, 2);
             console.log("provinceId = " + provinceId);
             console.log("cityId = " + cityId);
-            provinces[provinceIdMap.get(provinceId)].cities[cityIdMap.get(cityId)].districts = districts;
+            provinces[provinceIdMap.get(provinceId)].children[cityIdMap.get(cityId)].children = districts;
 
             return districts;
         })
