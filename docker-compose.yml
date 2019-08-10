@@ -4,4 +4,4 @@ services:
     build: .
     restart: always
     volumes:
-      - "~/docker_volume/xx/xx.json:/root/output.json"
+      - "~/docker_volume/NBSPRC:/data"

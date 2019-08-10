@@ -1,8 +1,15 @@
+const arg = process.argv[2] || "output-" + Date.now() + ".json";
+if (arg == "-h" || arg == "--help") {
+    console.log("usage: node src/index.js [OUTPUT_FILE]");
+    process.exit(1);
+}
+
 const fs       = require('fs');
 
 //https://github.com/axios/axios
 const axios    = require('axios').create({
-    'responseType': 'arraybuffer'
+    timeout: 30000,
+    responseType: 'arraybuffer'
 });
 
 //https://github.com/cheeriojs/cheerio
@@ -23,9 +30,14 @@ axios.interceptors.request.use(request => {
 });
 
 axios.interceptors.response.use(response => {
-    //因为页面是GBK编码的，不得不自己做解码处理
-    response.data = iconv.decode(response.data, "GBK");
-    return response;
+    if(response.data) {
+        //因为页面是GBK编码的，不得不自己做解码处理
+          //console.log('response.data = ' + response.data);
+        response.data = iconv.decode(response.data, "GBK");
+          //console.log('response.data = ' + response.data);
+        return response;
+    }
+    throw new Error("response.data is empty!!");
 });
 
 const baseURL = "http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2018/";
@@ -41,7 +53,11 @@ from(axios.get(baseURL))
         map($ => {
             //分析网页结构，拿到省份数据   
             const a = $("tr.provincetr td a");
-            provinces = new Array(a.length);
+            const provinceCount = a.length;
+            if (provinceCount == 0) {
+                throw new Error("province list is empty!!");
+            }
+            provinces = new Array(provinceCount);
             a.each((i, item) => {
                 const provinceId = $(item).attr('href').substr(0, 2);
                 provinceIdMap.set(provinceId, i);
@@ -123,8 +139,9 @@ from(axios.get(baseURL))
         console.log("------------------------------------");
     }, err => {
         console.log(err);
+        process.exit(1);
     }, () => {
-        const error = fs.writeFileSync("output.json", JSON.stringify(provinces));        
+        const error = fs.writeFileSync(arg, JSON.stringify(provinces));        
         if (error) {
             console.log(error);    
         } else {

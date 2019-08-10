@@ -1,8 +1,9 @@
 FROM node:11-alpine
 MAINTAINER leleliu008@gmail.com
 WORKDIR /root
-VOLUME /root/output.json
+ADD docker-entrypoint.sh .
 ADD package.json .
 ADD src src
 ADD node_modules node_modules
-CMD [ "npm", "start" ]
+RUN mkdir /data
+ENTRYPOINT [ "./docker-entrypoint.sh" ]
