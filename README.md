@@ -1,8 +1,8 @@
 # NBSPRC-spider-nodejs
 扒取数据：<a href="http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/">国家统计局区划代码和城乡划分代码</a>
-
+<br>
 ## 在本地运行
-1、安装依赖工具：<a href="http://blog.fpliu.com/it/software/nodejs-interpreter">Node.js解释器</a>、<a href="http://blog.fpliu.com/it/software/npm">npm</a><br><br>
+1、安装依赖工具：<a href="http://blog.fpliu.com/it/software/nodejs-interpreter">Node.js解释器</a>、<a href="http://blog.fpliu.com/it/software/npm">npm</a>、<a href="http://blog.fpliu.com/it/software/git">git</a><br><br>
 2、下载代码、安装依赖模块、启动服务：
 ```
 git clone https://github.com/leleliu008/NBSPRC-spider-nodejs.git
@@ -13,7 +13,7 @@ npm start
 3、完成后，在当前目录下生成`output-${timestamp}.json`
 
 ## 在Docker中运行
-1、安装依赖工具：<a href="http://blog.fpliu.com/it/software/nodejs-interpreter">Node.js解释器</a>、<a href="http://blog.fpliu.com/it/software/npm">npm</a>、<a href="http://blog.fpliu.com/it/software/Docker">Docker</a><br><br>
+1、安装依赖工具：<a href="http://blog.fpliu.com/it/software/nodejs-interpreter">Node.js解释器</a>、<a href="http://blog.fpliu.com/it/software/npm">npm</a>、<a href="http://blog.fpliu.com/it/software/git">git</a>、<a href="http://blog.fpliu.com/it/software/Docker">Docker</a><br><br>
 2、下载代码、安装依赖模块：
 ```
 git clone https://github.com/leleliu008/NBSPRC-spider-nodejs.git
