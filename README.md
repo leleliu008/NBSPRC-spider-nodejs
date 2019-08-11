@@ -31,7 +31,7 @@ docker-compose up
 5、完成后，您本机的`~/docker_volume/NBSPRC`目录中的`.json`文件就是您要的最终文件。
 
 ## 汉字转Unicode码表示方法
-为了不出现乱码，通常会将汉字使用`Unicode`码表示，这个转换需要借助<a href="http://blog.fpliu.com/it/software/OracleJDK">OracleJDK</a>中的`native2ascii`工具，使用方法如下：
+为了不出现乱码，通常会将汉字使用`Unicode`码表示，这个转换需要借助<a href="http://blog.fpliu.com/it/software/development/language/Java/JDK">JDK</a>中的`native2ascii`工具，使用方法如下：
 ```
 native2ascii xx.json new.json
 ```
