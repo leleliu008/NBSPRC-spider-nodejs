@@ -1,18 +1,18 @@
 {
   "name": "NBSPRC-spider-nodejs",
   "version": "1.0.0",
-  "description": "",
+  "description": "扒取国家统计局区划代码和城乡划分代码",
+  "repository": "https://github.com/leleliu008/NBSPRC-spider-nodejs",
   "main": "index.js",
   "engins": {
     "node": "10.x.x"
   },
   "scripts": {
-    "start": "node src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/index.js"
   },
-  "keywords": [],
+  "keywords": ["NBSPRC", "spider", "node.js"],
   "author": "",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "dependencies": {
     "axios": "^0.19.2",
     "cheerio": "^1.0.0-rc.3",

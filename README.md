@@ -2,7 +2,7 @@
 扒取数据：[国家统计局区划代码和城乡划分代码](http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/)
 
 ## 在本地运行
-1、安装依赖工具：[Node.js Runtime](http://blog.fpliu.com/it/software/Node.js)、[yarn](http://blog.fpliu.com/it/software/yarn)、[git](http://blog.fpliu.com/it/software/git)
+1、安装依赖工具：[git](http://blog.fpliu.com/it/software/git)、[Node.js Runtime](http://blog.fpliu.com/it/software/Node.js)、[yarn](http://blog.fpliu.com/it/software/yarn)
 
 2、下载代码、安装依赖模块、启动服务：
 ```
@@ -14,13 +14,12 @@ yarn start
 3、完成后，在当前目录下生成`output-${timestamp}.json`
 
 ## 在Docker中运行
-1、安装依赖工具：[Node.js Runtime](http://blog.fpliu.com/it/software/Node.js)、[yarn](http://blog.fpliu.com/it/software/yarn)、[git](http://blog.fpliu.com/it/software/git)、[Docker](http://blog.fpliu.com/it/software/Docker)
+1、安装依赖工具：[git](http://blog.fpliu.com/it/software/git)、[Docker](http://blog.fpliu.com/it/software/Docker)
 
-2、下载代码、安装依赖模块：
+2、下载代码：
 ```
 git clone https://github.com/leleliu008/NBSPRC-spider-nodejs.git
 cd NBSPRC-spider-nodejs
-yarn install
 ```
 3、使用`docker-compose`构建：
 ```
