@@ -1,24 +1,26 @@
 # NBSPRC-spider-nodejs
-扒取数据：<a href="http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/">国家统计局区划代码和城乡划分代码</a>
-<br>
+扒取数据：[国家统计局区划代码和城乡划分代码](http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/)
+
 ## 在本地运行
-1、安装依赖工具：<a href="http://blog.fpliu.com/it/software/nodejs-interpreter">Node.js解释器</a>、<a href="http://blog.fpliu.com/it/software/npm">npm</a>、<a href="http://blog.fpliu.com/it/software/git">git</a><br><br>
+1、安装依赖工具：[Node.js Runtime](http://blog.fpliu.com/it/software/Node.js)、[yarn](http://blog.fpliu.com/it/software/yarn)、[git](http://blog.fpliu.com/it/software/git)
+
 2、下载代码、安装依赖模块、启动服务：
 ```
 git clone https://github.com/leleliu008/NBSPRC-spider-nodejs.git
 cd NBSPRC-spider-nodejs
-npm install --registry=https://registry.npm.taobao.org
-npm start
+yarn install
+yarn start
 ```
 3、完成后，在当前目录下生成`output-${timestamp}.json`
 
 ## 在Docker中运行
-1、安装依赖工具：<a href="http://blog.fpliu.com/it/software/nodejs-interpreter">Node.js解释器</a>、<a href="http://blog.fpliu.com/it/software/npm">npm</a>、<a href="http://blog.fpliu.com/it/software/git">git</a>、<a href="http://blog.fpliu.com/it/software/Docker">Docker</a><br><br>
+1、安装依赖工具：[Node.js Runtime](http://blog.fpliu.com/it/software/Node.js)、[yarn](http://blog.fpliu.com/it/software/yarn)、[git](http://blog.fpliu.com/it/software/git)、[Docker](http://blog.fpliu.com/it/software/Docker)
+
 2、下载代码、安装依赖模块：
 ```
 git clone https://github.com/leleliu008/NBSPRC-spider-nodejs.git
 cd NBSPRC-spider-nodejs
-npm install --registry=https://registry.npm.taobao.org
+yarn install
 ```
 3、使用`docker-compose`构建：
 ```

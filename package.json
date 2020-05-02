@@ -14,9 +14,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.18.1",
+    "axios": "^0.19.2",
     "cheerio": "^1.0.0-rc.3",
-    "iconv-lite": "^0.4.24",
+    "iconv-lite": "^0.5.1",
     "rxjs": "^6.5.2"
   }
 }

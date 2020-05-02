@@ -6,12 +6,6 @@ if (arg == "-h" || arg == "--help") {
 
 const fs       = require('fs');
 
-//https://github.com/axios/axios
-const axios    = require('axios').create({
-    timeout: 30000,
-    responseType: 'arraybuffer'
-});
-
 //https://github.com/cheeriojs/cheerio
 const cheerio  = require('cheerio');
 
@@ -20,34 +14,54 @@ const iconv    = require('iconv-lite');
 
 //https://github.com/Reactive-Extensions/RxJS
 //https://rxjs.dev/api
-const { from, of }      = require('rxjs');
-const { map, flatMap }  = require( 'rxjs/operators');
+const { from, of, interval } = require('rxjs');
+const { map, concatMap, retry, take, tap }  = require('rxjs/operators');
 
-axios.interceptors.request.use(request => {
-    //这里仅仅是为了打印日志
-    //console.log(request);
-    return request;
+//https://github.com/axios/axios
+const axios    = require('axios').default;
+axios.defaults.baseURL = "http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2018/";
+axios.defaults.timeout = 300000;
+axios.defaults.maxRedirects = 1000;
+axios.defaults.responseType = 'arraybuffer';
+axios.defaults.headers.common['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.122 Safari/537.36';
+axios.defaults.headers.common['Accept'] = 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8';
+axios.interceptors.request.use(config => {
+    let cookie = cookieArray.join(';');
+    if (cookie) {
+        config.headers['Cookie'] = cookie;
+    }
+    //console.log(config);
+    return config;
 });
-
 axios.interceptors.response.use(response => {
     if(response.data) {
         //因为页面是GBK编码的，不得不自己做解码处理
-          //console.log('response.data = ' + response.data);
         response.data = iconv.decode(response.data, "GBK");
-          //console.log('response.data = ' + response.data);
         return response;
     }
     throw new Error("response.data is empty!!");
 });
 
-const baseURL = "http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2018/";
-
 const provinceIdMap = new Map();
 const cityIdMap = new Map();
 var provinces;
+var cookieArray = [];
 
-from(axios.get(baseURL))
+const INTERVAL_MILLES = 60000;
+
+from(axios.get('/'))
     .pipe(
+        tap(response => {
+            const cookies = response.headers['set-cookie'];
+            if (cookies && cookies.length > 0) {
+                for (cookie of cookies) {
+                    const cookieValues = cookie.split(';');
+                    if (cookieValues && cookieValues.length > 0) {
+                        cookieArray.push(cookieValues[0]);
+                    }
+                }
+            }
+        }),
         map(response => response.data),
         map(data => cheerio.load(data)),
         map($ => {
@@ -70,8 +84,8 @@ from(axios.get(baseURL))
             });
             return provinces;
         }),
-        flatMap(provinces => of(...provinces)),
-        flatMap(province => from(axios.get(baseURL + province.id + ".html"))),
+        concatMap(provinces => interval(INTERVAL_MILLES).pipe(take(provinces.length), map(i => provinces[i]))),
+        concatMap(province => from(axios.get(province.id + ".html")).pipe(retry(5))),
         map(response => {
             const $ = cheerio.load(response.data);
             //分析网页结构，拿到城市数据
@@ -91,12 +105,12 @@ from(axios.get(baseURL))
             });
 
             const url = response.config.url;
-            const provinceId = url.substring(url.lastIndexOf('/'), url.length).substr(1, 2);
+            const provinceId = url.substr(0, 2);
             provinces[provinceIdMap.get(provinceId)].children = cities;
             return cities;
         }),
-        flatMap(cities => of(...cities)),
-        flatMap(city => from(axios.get(baseURL + city.id.substr(0, 2) + "/" + city.id + ".html"))),
+        concatMap(cities => interval(INTERVAL_MILLES).pipe(take(cities.length), map(i => cities[i]))),
+        concatMap(city => from(axios.get(city.id.substr(0, 2) + "/" + city.id + ".html")).pipe(retry(5))),
         map(response => {
             const $ = cheerio.load(response.data);    
             //分析网页结构，拿到区/县数据 
@@ -125,8 +139,9 @@ from(axios.get(baseURL))
             });
 
             const url = response.config.url;
-            const cityId = url.substring(url.lastIndexOf('/'), url.length).substr(1, 4);
+            const cityId = url.substr(3, 4);
             const provinceId = cityId.substr(0, 2);
+            console.log("url = " + url);
             console.log("provinceId = " + provinceId);
             console.log("cityId = " + cityId);
             provinces[provinceIdMap.get(provinceId)].children[cityIdMap.get(cityId)].children = districts;
@@ -138,7 +153,7 @@ from(axios.get(baseURL))
         console.log(districts);
         console.log("------------------------------------");
     }, err => {
-        console.log(err);
+        console.error("error occurred : ", err);
         process.exit(1);
     }, () => {
         const error = fs.writeFileSync(arg, JSON.stringify(provinces));        
